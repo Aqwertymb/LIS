@@ -28,13 +28,13 @@ const ModalAuthorization = ({
             </ModalHeader>
             <ModalBody className="pb-8">
               <div className="flex gap-2">
-                <Tooltip content="Вконтакте">
+                <Tooltip content="Google">
                   <Button
                     color="primary"
-                    onPress={() => signIn("vk")}
+                    onPress={() => signIn("google")}
                     isIconOnly
                   >
-                    <Icon name="vk" size={24} className="fill-white" />
+                    <Icon name="google" size={24} className="fill-white" />
                   </Button>
                 </Tooltip>
                 <Tooltip content="Яндекс">
