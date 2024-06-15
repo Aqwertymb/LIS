@@ -11,35 +11,33 @@ const SliderNews = () => {
   const news = [
     {
       id: 1,
-      title: "Lorem Lorem Lorem Lorem",
-      description:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero error qui ad rem aliquid amet velit magni accusamus, aut vero commodi facilis, excepturi facere eaque dolore. Qui eligendi possimus illum?",
-      image: "/YbN8kme76TA.jpg",
+      title: "Как вам? Хочется кусочек?",
+      description: "Внутри классический чизкейк со свежими ягодами",
+      image: "/rpk2Kkx28r4.jpg",
     },
     {
       id: 2,
-      title: "Lorem Lorem Lorem Lorem",
+      title: "Это точно лучше чем носки или пена для бритья",
       description:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero error qui ad rem aliquid amet velit magni accusamus, aut vero commodi facilis, excepturi facere eaque dolore. Qui eligendi possimus illum?",
-      image: "/YbN8kme76TA.jpg",
+        "Сыр моцарелла внутри, снаружи Творожный сыр с зеленью и пикантное украшение",
+      image: "/aZt9ZjxgbZI.jpg",
     },
     {
       id: 3,
-      title: "Lorem Lorem Lorem Lorem",
-      description: "",
-      image: "/YbN8kme76TA.jpg",
+      title: "Один из любимчиков наших гостей",
+      description: "Мягкие маковый коржи и прослойка лесной брусники",
+      image: "/XGq4kql2h8w.jpg",
     },
     {
       id: 4,
-      title: "Lorem Lorem Lorem Lorem",
-      description:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero error qui ad rem aliquid amet velit magni accusamus, aut vero commodi facilis, excepturi facere eaque dolore. Qui eligendi possimus illum?",
-      image: "/YbN8kme76TA.jpg",
+      title: "Сладкой недели!",
+      description: "Мы рады вам в любой день!",
+      image: "/Fa0ERDFuEUg.jpg",
     },
   ];
 
   return (
-    <div className="flex w-full h-[60vh] mx-auto overflow-hidden">
+    <div className="flex w-full h-[50vh] mx-auto overflow-hidden">
       <Swiper
         centeredSlides
         loop
@@ -64,9 +62,7 @@ const SliderNews = () => {
         hashNavigation
       >
         {news.map((data, index) => (
-          <SwiperSlide
-            key={index}
-          >
+          <SwiperSlide key={index}>
             <div className="relative aspect-[3/4] lg:aspect-[4/3] rounded-md overflow-hidden">
               <img
                 src={data.image}

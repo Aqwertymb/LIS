@@ -42,12 +42,14 @@ const PopularComments = () => {
                 key={index}
                 className="flex flex-col gap-2.5 rounded-medium p-5 bg-content1 shadow-sm border border-solid border-default-200"
               >
+                <div>
+                </div>
                 <div className="flex items-center gap-2">
                   <User
                     classNames={{ wrapper: "flex-1" }}
                     name={data.author.name}
                     description={
-                      <Link
+                      <Link 
                         href={`/products/${data.product?.handle}`}
                         size="sm"
                         isExternal
@@ -60,6 +62,7 @@ const PopularComments = () => {
                       src: data.author?.image ?? undefined,
                     }}
                   />
+                  
                 </div>
                 <p className="text-default-700 text-balance line-clamp-6">
                   {data.content}

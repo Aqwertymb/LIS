@@ -7,6 +7,7 @@ import { CartContext } from "@/components/CartContext";
 import { getPopularProducts } from "@/action/get-popular-products";
 import Icon from "@/lib/IconSprite";
 import Rating from "@/components/Rating";
+import { Link } from "@nextui-org/react";
 
 const PopularList = () => {
   const [loading, setLoading] = useState(false);
@@ -16,7 +17,7 @@ const PopularList = () => {
   useEffect(() => {
     async function fetchPopularProducts() {
       setLoading(true);
-      const popularProducts = await getPopularProducts();
+      const popularProducts = await getPopularProducts(6);
       setProducts(popularProducts);
       setLoading(false);
     }
@@ -63,6 +64,7 @@ const PopularList = () => {
                   >
                     <Icon name="star" size={18} className="fill-secondary" />
                   </Button>
+
                   <div className="relative flex h-52 max-h-full w-full flex-col items-center justify-center overflow-visible rounded-lg">
                     <div className="w-full h-full blur-[1px]">
                       <img
@@ -100,9 +102,10 @@ const PopularList = () => {
                         color="primary"
                         radius="lg"
                         fullWidth
-                        onPress={() => addToCart(product)}
+                        href={`/products/${product?.handle}`}
+                        as={Link}
                       >
-                        Добавить
+                        Перейти к продукту
                       </Button>
                     </div>
                   </div>
