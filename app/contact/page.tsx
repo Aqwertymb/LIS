@@ -12,8 +12,10 @@ import {
   Button,
   Input,
   Textarea,
+  Link,
 } from "@nextui-org/react";
 import Icon from "@/lib/IconSprite";
+
 
 const Contact = () => {
   return (
@@ -81,7 +83,9 @@ const Contact = () => {
                 Карта
               </h4>
             </CardHeader>
-            <CardBody></CardBody>
+            <CardBody>
+            <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A334bea28064b0ca96b038e6c4aac576a12a5f74518171bcbab08487da7add230&amp;source=constructor" width="600" height="400" frameBorder="0" className="w-full h-full"></iframe>
+            </CardBody>
           </Card>
           <Card
             isFooterBlurred
@@ -89,10 +93,10 @@ const Contact = () => {
           >
             <CardHeader className="absolute z-10 flex-col items-start bg-gradient-to-b from-black to-transparent opacity-85">
               <p className="text-tiny text-white/60 uppercase font-bold">
-                Text Text Text Text
+                Тепло
               </p>
               <h4 className="text-white/90 font-medium text-xl">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Самые свежие новости
               </h4>
             </CardHeader>
             <Image
@@ -104,11 +108,19 @@ const Contact = () => {
             <CardFooter className="absolute bottom-0 z-10 border-t-1 border-default-600 dark:border-default-100">
               <div className="flex flex-grow gap-4 items-center">
                 <Button className="text-tiny" color="primary" isIconOnly>
-                  <Icon name="vk" size={24} className="fill-white" />
+                  <Link href="https://vk.com/lis0809">
+                    <Icon name="vk" size={24} className="fill-white" />{" "}
+                  </Link>
+                </Button>
+
+                <Button className="text-tiny" color="primary" isIconOnly>
+                  <Link href="https://t.me/LISCAFE08">
+                    <Icon name="tg" size={24} className="fill-white" />{" "}
+                  </Link>
                 </Button>
                 <div className="flex flex-col">
                   <p className="text-tiny text-white/70">Следите за нами</p>
-                  <p className="text-tiny text-white/70">В VK</p>
+                  <p className="text-tiny text-white/70">В VK и Telegram</p>
                 </div>
               </div>
             </CardFooter>
@@ -116,10 +128,10 @@ const Contact = () => {
 
           <Card
             isFooterBlurred
-            className="w-full h-[360px] col-span-12 sm:col-span-7"
+            className=" flex w-full h-[360px] col-span-12 sm:col-span-7"
           >
-            <CardHeader className="flex flex-col items-start">
-              <h3 className="leading-8 text-default-600 text-xl font-medium ml-2">
+            <CardHeader className="flex flex-col">
+              <h3 className="leading-8 text-white/90 text-xl font-medium ml-2 justify-center">
                 Связаться с нами
               </h3>
             </CardHeader>
@@ -133,8 +145,8 @@ const Contact = () => {
               <div className="w-full max-w-sm flex flex-col gap-3 mx-auto">
                 <Input
                   isRequired
-                  type="email"
-                  label="Email"
+                  type="Имя"
+                  label="Имя"
                   labelPlacement="inside"
                   className="max-w-sm"
                 />
@@ -150,7 +162,7 @@ const Contact = () => {
             </CardBody>
           </Card>
 
-          <Card
+          {/* <Card
             isFooterBlurred
             className="w-full h-[300px] col-span-12 sm:col-span-5"
           >
@@ -169,6 +181,7 @@ const Contact = () => {
                 <p className="text-white text-tiny">Следите</p>
                 <p className="text-white text-tiny">за новостями</p>
               </div>
+              <Link href="https://vk.com/lis0809">
               <Button
                 className="text-tiny"
                 color="primary"
@@ -178,8 +191,9 @@ const Contact = () => {
                 <Icon name="vk" size={24} className="fill-white" />
                 <span>Группа Вконтакте</span>
               </Button>
+              </Link>
             </CardFooter>
-          </Card>
+          </Card> */}
         </div>
       </section>
 

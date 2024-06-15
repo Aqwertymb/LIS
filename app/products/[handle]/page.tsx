@@ -108,7 +108,7 @@ export default function ProductPage({
                 <div className="mt-6 flex flex-col gap-1">
                   <div className="mb-4 flex items-center gap-2 text-default-700">
                     <p className="text-small font-medium">
-                      Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                      
                     </p>
                   </div>
 

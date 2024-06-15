@@ -16,6 +16,7 @@ export default function Home() {
           <SliderNews />
         </section>
         <section>
+          <Heading title="Выбор покупателей" />
           <PopularList />
         </section>
         <section>
