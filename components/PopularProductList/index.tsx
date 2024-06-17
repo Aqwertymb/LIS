@@ -17,7 +17,7 @@ const PopularList = () => {
   useEffect(() => {
     async function fetchPopularProducts() {
       setLoading(true);
-      const popularProducts = await getPopularProducts(6);
+      const popularProducts = await getPopularProducts(5);
       setProducts(popularProducts);
       setLoading(false);
     }
