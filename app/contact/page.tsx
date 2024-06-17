@@ -16,7 +16,6 @@ import {
 } from "@nextui-org/react";
 import Icon from "@/lib/IconSprite";
 
-
 const Contact = () => {
   return (
     <>
@@ -84,7 +83,13 @@ const Contact = () => {
               </h4>
             </CardHeader>
             <CardBody>
-            <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A334bea28064b0ca96b038e6c4aac576a12a5f74518171bcbab08487da7add230&amp;source=constructor" width="600" height="400" frameBorder="0" className="w-full h-full"></iframe>
+              <iframe
+                src="https://yandex.ru/map-widget/v1/?um=constructor%3A334bea28064b0ca96b038e6c4aac576a12a5f74518171bcbab08487da7add230&amp;source=constructor"
+                width="600"
+                height="400"
+                frameBorder="0"
+                className="w-full h-full"
+              ></iframe>
             </CardBody>
           </Card>
           <Card
@@ -113,7 +118,7 @@ const Contact = () => {
                   </Link>
                 </Button>
 
-                <Button className="text-tiny" color="primary" isIconOnly>
+                <Button className="text-tiny" color="danger" isIconOnly>
                   <Link href="https://t.me/LISCAFE08">
                     <Icon name="tg" size={24} className="fill-white" />{" "}
                   </Link>
