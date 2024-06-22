@@ -1,8 +1,10 @@
 "use client";
 
+import onChange from 'on-change';
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import Heading from "@/components/heading";
+import React, { useState } from 'react';
 import {
   Card,
   CardHeader,
@@ -15,8 +17,45 @@ import {
   Link,
 } from "@nextui-org/react";
 import Icon from "@/lib/IconSprite";
+import { parse } from "path";
+import { sendError } from 'next/dist/server/api-utils';
 
 const Contact = () => {
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+
+  const handlePhoneNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    const formattedValue = value.replace(/\D/g, '').replace(/^(\d{1,2})(\d{3})(\d{3})(\d{2})(\d{2})$/, '+$1 ($2) $3-$4-$5');
+    setPhoneNumber(formattedValue);
+  };
+
+  const sendContactForm = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formData = { email, phoneNumber, message };
+    console.log('Отправляемые данные:', formData);
+
+    fetch('/api/sendemail/send-email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    })
+    .then(response => response.json())
+    .then(data => {
+      alert(data.message);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Ошибка при отправке сообщения.');
+    });
+  };
+  
+  
+  
   return (
     <>
       <NavBar />
@@ -132,6 +171,7 @@ const Contact = () => {
           </Card>
 
           <Card
+            
             isFooterBlurred
             className=" flex w-full h-[360px] col-span-12 sm:col-span-7"
           >
@@ -147,61 +187,47 @@ const Contact = () => {
               alt="image"
             />
             <CardBody className="flex">
-              <div className="w-full max-w-sm flex flex-col gap-3 mx-auto">
+                <form onSubmit={sendContactForm} id="contact-form" method="post" role="form" className="w-full max-w-sm flex flex-col gap-3 mx-auto ">
                 <Input
                   isRequired
-                  type="Имя"
-                  label="Имя"
+                  id="email"
+                  type="email"
+                  label="Ваш Email"
                   labelPlacement="inside"
                   className="max-w-sm"
+                  name="email"
+                  value={email}
+                  onChange={event => setEmail(event.target.value)}
+                />
+                <Input
+                  isRequired
+                  id="phoneNumber"
+                  type="text"
+                  label="Ваш номер телефона"
+                  labelPlacement="inside"
+                  className="max-w-sm"
+                  value={phoneNumber}
+                  onChange={handlePhoneNumberChange}
+                  name="phoneNumber"
                 />
                 <Textarea
                   isRequired
+                  id="message"
                   label="Сообщение"
                   labelPlacement="inside"
                   placeholder="Ваше сообщение..."
                   className="max-w-sm"
+                  name="message"
+                  value={message}
+                  onChange={event => setMessage(event.target.value)}
                 />
-                <Button color="primary">Отправить</Button>
-              </div>
+                  <Button color="primary" type="submit">Отправить</Button>
+                  </form>
             </CardBody>
           </Card>
-
-          {/* <Card
-            isFooterBlurred
-            className="w-full h-[300px] col-span-12 sm:col-span-5"
-          >
-            <CardHeader className="absolute z-10 top-1 flex-col items-start">
-              <p className="text-tiny text-white/60 uppercase font-bold">New</p>
-              <h4 className="text-black font-medium text-2xl">Acme camera</h4>
-            </CardHeader>
-            <Image
-              removeWrapper
-              alt="Card example background"
-              className="z-0 w-full h-full scale-125 -translate-y-6 object-cover"
-              src="/-7ep_Xbd0w4.jpg"
-            />
-            <CardFooter className="absolute bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
-              <div>
-                <p className="text-white text-tiny">Следите</p>
-                <p className="text-white text-tiny">за новостями</p>
-              </div>
-              <Link href="https://vk.com/lis0809">
-              <Button
-                className="text-tiny"
-                color="primary"
-                radius="full"
-                size="sm"
-              >
-                <Icon name="vk" size={24} className="fill-white" />
-                <span>Группа Вконтакте</span>
-              </Button>
-              </Link>
-            </CardFooter>
-          </Card> */}
         </div>
       </section>
-
+      
       <Footer />
     </>
   );
