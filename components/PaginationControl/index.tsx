@@ -7,14 +7,15 @@ const PaginationControls = ({ total }: { total: number }) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
-  const page = searchParams.get("page") ?? 1;
-  const per_page = searchParams.get("per_page") ?? 12;
+  const page = searchParams?.get("page") ?? 1;
+  const per_page = searchParams?.get("per_page") ?? 12;
 
   const handlePage = useCallback(
     (page: number) => {
-      router.push(`${pathname}/?page=${Number(page)}&per_page=${per_page}`);
+      const currentPerPage = searchParams?.get("per_page") ?? per_page;
+      router.push(`${pathname}/?page=${Number(page)}&per_page=${currentPerPage}`);
     },
-    [router, pathname, per_page]
+    [router, pathname, searchParams, per_page]
   );
 
   return (
