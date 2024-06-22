@@ -3,14 +3,14 @@ import transporter from '@/utils/nodemailer.config';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
-    const { email, phoneNumber, message } = req.body;
+    const { email, phoneNumber, message, totalAmount } = req.body;
 
     try {
       const info = await transporter.sendMail({
         from: 'lesha1zmailov@yandex.ru',
         to: 'lesha1zmailov@yandex.ru',
         subject: 'Новое сообщение!',
-        html: `<p>Email: ${email}</p><p>Phone Number: ${phoneNumber}</p><p>Message: ${message}</p>`,
+        html: `<p>Email: ${email}</p><p>Phone Number: ${phoneNumber}</p><p>Message: ${message}</p><p>Total Amount: ${totalAmount}</p>`,
       });
 
       if (info.accepted.length > 0) {

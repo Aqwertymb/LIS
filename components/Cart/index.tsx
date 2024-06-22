@@ -1,29 +1,78 @@
-import { Suspense, useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { CartContext } from "@/components/CartContext";
-import ProductCardSlider from "@/components/SwiperSliders/ProductCardSlider";
 import FormatPrice from "@/utils/FormatPrice";
 import Icon from "@/lib/IconSprite";
 import { CartItem } from "@/types";
-import { Link } from "@nextui-org/react";
 import {
   Modal,
   ModalContent,
   ModalHeader,
   ModalBody,
   ModalFooter,
-  Button,
   useDisclosure,
+  Button,
+  Input,
+  Textarea
 } from "@nextui-org/react";
 
 export default function Cart() {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const { cart, setCart } = useContext(CartContext);
-  const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isInfoOpen, setIsInfoOpen] = useState(false);
-  const openCartModal = () => setIsCartOpen(true);
-  const closeCartModal = () => setIsCartOpen(false);
-  const openInfoModal = () => setIsInfoOpen(true);
-  const closeInfoModal = () => setIsInfoOpen(false);
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [totalAmount, setTotalAmount] = useState(0); // Состояние для общей суммы заказа
+
+  useEffect(() => {
+    updateMessage();
+  }, [cart]);
+
+  const updateMessage = () => {
+    // Формируем текст сообщения на основе содержимого корзины
+    const itemsText = cart.map((item) => `${item.product.title} (${item.quantity} шт.)`).join('\n');
+    const calculatedTotalAmount = cart.reduce((accumulator, item) => accumulator + item.product.price * item.quantity, 0);
+    setTotalAmount(calculatedTotalAmount); // Обновляем состояние totalAmount
+    setMessage(`\n${itemsText}\n\nОбщая сумма заказа: ${FormatPrice(calculatedTotalAmount)} ₽`);
+  };
+
+  const handlePhoneNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    const formattedValue = value.replace(/\D/g, '').replace(/^(\d{1,2})(\d{3})(\d{3})(\d{2})(\d{2})$/, '+$1 ($2) $3-$4-$5');
+    setPhoneNumber(formattedValue);
+  };
+
+  const sendContactForm = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formData = { email, phoneNumber, message };
+
+    try {
+      const response = await fetch('/api/sendemail/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        alert(data.message);
+      } else {
+        throw new Error('Failed to send email');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Ошибка при отправке сообщения.');
+    }
+  };
+
+  const clearCart = () => {
+    setCart([]); // Очищаем корзину
+    setTotalAmount(0); // Сбрасываем общую сумму заказа
+    setMessage(''); // Очищаем сообщение
+    onClose(); // Закрываем модальное окно
+  };
   
   return (
     <>
@@ -32,7 +81,7 @@ export default function Cart() {
         <span>
           {FormatPrice(
             cart.reduce(
-              (accumulator: number, currentProduct: CartItem) =>
+              (accumulator, currentProduct) =>
                 accumulator +
                 currentProduct.product.price * currentProduct.quantity,
               0
@@ -41,159 +90,73 @@ export default function Cart() {
           ₽
         </span>
       </Button>
-      <Modal
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
-        placement="top"
-        backdrop="blur"
-        scrollBehavior="outside"
-        size="xl"
-      >
+      <Modal isOpen={isOpen} onOpenChange={onClose}>
         <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="text-2xl">Корзина</ModalHeader>
-              <ModalBody>
-                <div className="space-y-2">
-                  {cart.map((data) => (
-                    <div
-                      key={data.id}
-                      className="relative flex items-center gap-2 py-2 px-4 border-b border-solid border-zinc-300 rounded-lg"
-                    >
-                      <div className="relative w-16 h-16 shrink-0 overflow-hidden">
-                        <ProductCardSlider
-                          autoplayDelay={5000}
-                          images={data.product.imageUrl}
-                        />
-                      </div>
-                      <div className="product-details">
-                        <div className="text-base md:text-lg line-clamp-2">
-                          {data.product.title}
-                        </div>
-                        <div className="text-base font-semibold">
-                          {FormatPrice(data.product.price)}₽
-                        </div>
-                      </div>
-                      <div className="ml-auto">
-                        <div className="flex items-center justify-center border border-solid border-zinc-300 rounded-full overflow-hidden">
-                          <button
-                            className="text-gray-500 px-2 py-0.5 md:px-3 md:py-1 bg-gray-100 hover:bg-gray-200"
-                            onClick={() => {
-                              setCart((prevProducts) => {
-                                const updatedProducts = prevProducts.map(
-                                  (item) => {
-                                    if (item.id === data.id) {
-                                      return {
-                                        ...item,
-                                        quantity: item.quantity - 1,
-                                      };
-                                    }
-                                    return item;
-                                  }
-                                );
-
-                                return updatedProducts.filter(
-                                  (item) => item.quantity > 0
-                                );
-                              });
-                            }}
-                          >
-                            -
-                          </button>
-
-                          <input
-                            type="number"
-                            className="mx-2 text-sm w-4 text-center"
-                            value={data.quantity}
-                            readOnly
-                          />
-                          <button
-                            className="text-gray-500 px-2 py-0.5 md:px-3 md:py-1 bg-gray-100 hover:bg-gray-200"
-                            onClick={() => {
-                              setCart((prevProducts) => {
-                                return prevProducts.map((item) => {
-                                  if (item.id === data.id) {
-                                    return {
-                                      ...item,
-                                      quantity: item.quantity + 1,
-                                    };
-                                  }
-                                  return item;
-                                });
-                              });
-                            }}
-                          >
-                            +
-                          </button>
-                        </div>
-                      </div>
-                      <div>
-                        <button
-                          className="absolute -top-0.5 -right-0.5 leading-none border border-solid border-zinc-300 w-5 h-5 rounded-full bg-white"
-                          onClick={() => {
-                            setCart((prevProducts) => {
-                              return prevProducts.filter(
-                                (item) => item.id !== data.id
-                              );
-                            });
-                          }}
-                        >
-                          <Icon name="close" size={18} />
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                  {!cart.length && <div className="w-24 h-24 mx-auto"></div>}
-                </div>
-              </ModalBody>
-              <ModalFooter className="flex justify-between">
-                <Button
-                  onClick={() => setCart([])}
-                  color="danger"
-                  variant="light"
-                  onPress={onClose}
-                >
-                  Очистить
-                </Button>
-                <Button color="primary" onPress={() => { closeCartModal(); openInfoModal(); }}>
-                  {FormatPrice(
-                    cart.reduce(
-                      (accumulator: number, currentProduct: CartItem) =>
-                        accumulator +
-                        currentProduct.product.price * currentProduct.quantity,
-                      0
-                    )
-                  )}
-                  ₽
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
-      <Modal isOpen={isInfoOpen} onOpenChange={(isOpen) => setIsInfoOpen(isOpen)}>
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1">Важная информация!</ModalHeader>
-              <ModalBody>
-                <p> 
-                  Если вы хотите офрмить заказ, то обратитесь по номеру телефона в шапке сайте сайта или свяжитесь с нами заполнив форму на странице Контакты
-                </p>
-                
-              </ModalBody>
-              <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  Закрыть
-                </Button>
-                <Button color="primary" 
-                  href={`/contact`}
-                  as={Link}>
-                  Перейти к контактам
-                </Button>
-              </ModalFooter>
-            </>
-          )}
+          <ModalHeader className="text-2xl">Оформить заказ!</ModalHeader>
+          <ModalBody>
+            <form
+              onSubmit={sendContactForm}
+              id="contact-form"
+              method="post"
+              role="form"
+              className="w-full max-w-sm flex flex-col gap-2 mx-auto"
+            >
+              <Input
+                isRequired
+                id="email"
+                type="email"
+                label="Ваш Email"
+                labelPlacement="inside"
+                className="max-w-sm"
+                name="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+              />
+              <Input
+                isRequired
+                id="phoneNumber"
+                type="text"
+                label="Ваш номер телефона"
+                placeholder="+7 (XXX) XXX XX-XX"
+                labelPlacement="inside"
+                className="max-w-sm"
+                value={phoneNumber}
+                onChange={handlePhoneNumberChange}
+                name="phoneNumber"
+              />
+              <Textarea
+                isRequired
+                id="message"
+                label="Сообщение"
+                labelPlacement="inside"
+                placeholder="Ваше сообщение..."
+                className="max-w-sm"
+                name="message"
+                value={message}
+                onChange={(event) => setMessage(event.target.value)}
+              />
+              <Button color="primary" type="submit">
+                Отправить заказ на сумму {FormatPrice(totalAmount)} ₽
+              </Button>
+              <Button onClick={clearCart} variant="light" className="mt-2" color="danger">
+                Очистить корзину
+              </Button>
+            </form>
+            <small>
+              <p className="text-sky-300">
+                Нажимая на кнопку, вы даете согласие на обработку персональных
+                данных и соглашаетесь с{" "}
+                <a href="/personal" className="text-sky-300 underline">
+                  политикой конфиденциальности
+                </a>
+              </p>
+            </small>
+          </ModalBody>
+          <ModalFooter>
+            <Button onClick={onClose} variant="light">
+              Закрыть
+            </Button>
+          </ModalFooter>
         </ModalContent>
       </Modal>
     </>
