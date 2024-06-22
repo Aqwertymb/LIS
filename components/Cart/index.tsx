@@ -1,9 +1,10 @@
-import { Suspense, useContext } from "react";
+import { Suspense, useContext, useState } from "react";
 import { CartContext } from "@/components/CartContext";
 import ProductCardSlider from "@/components/SwiperSliders/ProductCardSlider";
 import FormatPrice from "@/utils/FormatPrice";
 import Icon from "@/lib/IconSprite";
 import { CartItem } from "@/types";
+import { Link } from "@nextui-org/react";
 import {
   Modal,
   ModalContent,
@@ -17,7 +18,13 @@ import {
 export default function Cart() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { cart, setCart } = useContext(CartContext);
-
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isInfoOpen, setIsInfoOpen] = useState(false);
+  const openCartModal = () => setIsCartOpen(true);
+  const closeCartModal = () => setIsCartOpen(false);
+  const openInfoModal = () => setIsInfoOpen(true);
+  const closeInfoModal = () => setIsInfoOpen(false);
+  
   return (
     <>
       <Button onClick={onOpen} color="primary" variant="flat">
@@ -148,7 +155,7 @@ export default function Cart() {
                 >
                   Очистить
                 </Button>
-                <Button color="primary" onPress={onClose}>
+                <Button color="primary" onPress={() => { closeCartModal(); openInfoModal(); }}>
                   {FormatPrice(
                     cart.reduce(
                       (accumulator: number, currentProduct: CartItem) =>
@@ -158,6 +165,31 @@ export default function Cart() {
                     )
                   )}
                   ₽
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+      <Modal isOpen={isInfoOpen} onOpenChange={(isOpen) => setIsInfoOpen(isOpen)}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">Важная информация!</ModalHeader>
+              <ModalBody>
+                <p> 
+                  Если вы хотите офрмить заказ, то обратитесь по номеру телефона в шапке сайте сайта или свяжитесь с нами заполнив форму на странице Контакты
+                </p>
+                
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  Закрыть
+                </Button>
+                <Button color="primary" 
+                  href={`/contact`}
+                  as={Link}>
+                  Перейти к контактам
                 </Button>
               </ModalFooter>
             </>
