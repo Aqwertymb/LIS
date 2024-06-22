@@ -204,6 +204,7 @@ const Contact = () => {
                   id="phoneNumber"
                   type="text"
                   label="Ваш номер телефона"
+                  placeholder="+7 (XXX) XXX XX-XX"
                   labelPlacement="inside"
                   className="max-w-sm"
                   value={phoneNumber}
