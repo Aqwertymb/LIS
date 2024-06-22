@@ -3,10 +3,10 @@ import { useSearchParams } from "next/navigation";
 
 import PaginationControls from "@/components/PaginationControl";
 import ProductsFilters from "@/components/ProductsFilters";
-
-import type { FiltersProps, ProductProps } from "@/types";
 import { getProducts } from "@/action/get-products";
 import { PlaceListGrid } from "@/components/PlaceListGrid";
+
+import type { FiltersProps, ProductProps } from "@/types";
 
 const ProductCatalog = () => {
   const [totalCount, setTotalCount] = useState<number>(1);
@@ -28,8 +28,8 @@ const ProductCatalog = () => {
   const [products, setProducts] = useState<ProductProps[]>([]);
 
   const searchParams = useSearchParams();
-  const page = searchParams.get("page") ?? 1;
-  const per_page = searchParams.get("per_page") ?? 12;
+  const page = searchParams?.get("page") ?? 1;
+  const per_page = searchParams?.get("per_page") ?? 12;
 
   const fetchProducts = async () => {
     setLoading(true);
