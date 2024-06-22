@@ -187,7 +187,7 @@ const Contact = () => {
               alt="image"
             />
             <CardBody className="flex">
-                <form onSubmit={sendContactForm} id="contact-form" method="post" role="form" className="w-full max-w-sm flex flex-col gap-3 mx-auto ">
+                <form onSubmit={sendContactForm} id="contact-form" method="post" role="form" className="w-full max-w-sm flex flex-col gap-2 mx-auto ">
                 <Input
                   isRequired
                   id="email"
@@ -223,6 +223,9 @@ const Contact = () => {
                 />
                   <Button color="primary" type="submit">Отправить</Button>
                   </form>
+                  <small>
+                  <p className='text-sky-300	'>Нажимая на кнопку, вы даете согласие на обработку персональных данных и соглашаетесь c </p> <a href="/personal" className='text-sky-300	 underline'> политикой конфиденциальности </a>
+                    </small>
             </CardBody>
           </Card>
         </div>
