@@ -34,7 +34,7 @@ const Contact = () => {
   const sendContactForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const formData = { email, phoneNumber, message };
+    const formData = { email, phoneNumber, message}; 
     console.log('Отправляемые данные:', formData);
 
     fetch('/api/sendemail/send-email', {
