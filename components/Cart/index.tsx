@@ -20,8 +20,9 @@ export default function Cart() {
   const { cart, setCart } = useContext(CartContext);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
-  const [totalAmount, setTotalAmount] = useState(0); // Состояние для общей суммы заказа
+  const [shopList, setShopList] = useState('');
+  const [comment, setComment] = useState('');
+  var [totalAmount, setTotalAmount] = useState(0); // Состояние для общей суммы заказа
 
   useEffect(() => {
     updateMessage();
@@ -30,10 +31,12 @@ export default function Cart() {
   const updateMessage = () => {
     // Формируем текст сообщения на основе содержимого корзины
     const itemsText = cart.map((item) => `${item.product.title} (${item.quantity} шт.)`).join('\n');
-    const calculatedTotalAmount = cart.reduce((accumulator, item) => accumulator + item.product.price * item.quantity, 0);
+    var calculatedTotalAmount = cart.reduce((accumulator, item) => accumulator + item.product.price * item.quantity, 0);
     setTotalAmount(calculatedTotalAmount); // Обновляем состояние totalAmount
-    setMessage(`\n${itemsText}\n\nОбщая сумма заказа: ${FormatPrice(calculatedTotalAmount)} ₽`);
+    setShopList(`\n${itemsText}\n\nОбщая сумма заказа: ${FormatPrice(calculatedTotalAmount)} ₽`);
+    totalAmount=calculatedTotalAmount;
   };
+  
 
   const handlePhoneNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -44,7 +47,8 @@ export default function Cart() {
   const sendContactForm = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const formData = { email, phoneNumber, message };
+    const formData = { email, phoneNumber, shopList, comment, totalAmount };
+
 
     try {
       const response = await fetch('/api/sendemail/send-email', {
@@ -70,9 +74,10 @@ export default function Cart() {
   const clearCart = () => {
     setCart([]); // Очищаем корзину
     setTotalAmount(0); // Сбрасываем общую сумму заказа
-    setMessage(''); // Очищаем сообщение
+    setShopList(''); // Очищаем сообщение
     onClose(); // Закрываем модальное окно
   };
+  
   
   return (
     <>
@@ -90,75 +95,86 @@ export default function Cart() {
           ₽
         </span>
       </Button>
-      <Modal isOpen={isOpen} onOpenChange={onClose}>
-        <ModalContent>
-          <ModalHeader className="text-2xl">Оформить заказ!</ModalHeader>
-          <ModalBody>
-            <form
-              onSubmit={sendContactForm}
-              id="contact-form"
-              method="post"
-              role="form"
-              className="w-full max-w-sm flex flex-col gap-2 mx-auto"
-            >
-              <Input
-                isRequired
-                id="email"
-                type="email"
-                label="Ваш Email"
-                labelPlacement="inside"
-                className="max-w-sm"
-                name="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-              />
-              <Input
-                isRequired
-                id="phoneNumber"
-                type="text"
-                label="Ваш номер телефона"
-                placeholder="+7 (XXX) XXX XX-XX"
-                labelPlacement="inside"
-                className="max-w-sm"
-                value={phoneNumber}
-                onChange={handlePhoneNumberChange}
-                name="phoneNumber"
-              />
-              <Textarea
-                isRequired
-                id="message"
-                label="Сообщение"
-                labelPlacement="inside"
-                placeholder="Ваше сообщение..."
-                className="max-w-sm"
-                name="message"
-                value={message}
-                onChange={(event) => setMessage(event.target.value)}
-              />
-              <Button color="primary" type="submit">
-                Отправить заказ на сумму {FormatPrice(totalAmount)} ₽
-              </Button>
-              <Button onClick={clearCart} variant="light" className="mt-2" color="danger">
-                Очистить корзину
-              </Button>
-            </form>
-            <small>
-              <p className="text-sky-300">
-                Нажимая на кнопку, вы даете согласие на обработку персональных
-                данных и соглашаетесь с{" "}
-                <a href="/personal" className="text-sky-300 underline">
-                  политикой конфиденциальности
-                </a>
-              </p>
-            </small>
-          </ModalBody>
-          <ModalFooter>
-            <Button onClick={onClose} variant="light">
-              Закрыть
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <Modal isOpen={isOpen} onOpenChange={onClose} className="w-full max-h-full overflow-hidden flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto dark:bg-neutral-800 dark:border-neutral-700 dark:shadow-neutral-700/70">
+  <ModalContent>
+    <ModalHeader className="text-xl sm:text-2xl">Оформить заказ!</ModalHeader>
+    <ModalBody >
+      <form
+        onSubmit={sendContactForm}
+        id="contact-form"
+        method="post"
+        role="form"
+        className="w-full max-w-xs sm:max-w-sm flex flex-col gap-2 mx-auto"
+      >
+        <Input
+          isRequired
+          id="email"
+          type="email"
+          label="Ваш Email"
+          labelPlacement="inside"
+          className="max-w-xs sm:max-w-sm"
+          name="email"
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+        />
+        <Input
+          isRequired
+          id="phoneNumber"
+          type="text"
+          label="Ваш номер телефона"
+          placeholder="+7 (XXX) XXX XX-XX"
+          labelPlacement="inside"
+          className="max-w-xs sm:max-w-sm"
+          value={phoneNumber}
+          onChange={handlePhoneNumberChange}
+          name="phoneNumber"
+        />
+        <Textarea
+          id="shopList"
+          label="Список товаров:"
+          labelPlacement="inside"
+          placeholder="Ваше сообщение..."
+          className="max-w-xs sm:max-w-sm "
+          name="shopList"
+          readOnly
+          value={shopList}
+          onChange={(event) => setShopList(event.target.value)}
+        />
+        <Textarea
+          isRequired
+          id="comment"
+          label="Сообщение"
+          labelPlacement="inside"
+          placeholder="Ваше сообщение..."
+          className="max-w-xs sm:max-w-sm"
+          name="comment"
+          value={comment}
+          onChange={(event) => setComment(event.target.value)}
+        />
+        <Button color="primary" type="submit">
+          Отправить заказ на сумму {FormatPrice(totalAmount)} ₽
+        </Button>
+        <Button onClick={clearCart} variant="light" className="mt-2" color="danger">
+          Очистить корзину
+        </Button>
+      </form>
+      <small>
+        <p className="text-sky-300">
+          Нажимая на кнопку, вы даете согласие на обработку персональных
+          данных и соглашаетесь с{" "}
+          <a href="/personal" className="text-sky-300 underline">
+            политикой конфиденциальности
+          </a>
+        </p>
+      </small>
+    </ModalBody>
+    <ModalFooter>
+      <Button onClick={onClose} variant="light">
+        Закрыть
+      </Button>
+    </ModalFooter>
+  </ModalContent>
+</Modal>
     </>
   );
 }
