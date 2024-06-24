@@ -36,7 +36,7 @@ const SliderNews = () => {
   ];
 
   return (
-    <div className="flex w-full h-auto sm:h-[40vh] md:h-[30vh] lg:h-[50vh] xl:h-[60vh] mx-auto overflow-hidden">
+    <div className="flex w-full h-auto sm:h-[40vh] md:h-[35vh] lg:h-[50vh] xl:h-[50vh] mx-auto overflow-hidden">
       <Swiper
         centeredSlides
         loop
@@ -51,10 +51,10 @@ const SliderNews = () => {
         }}
         slidesPerView={1}
         breakpoints={{
-          400: {
+          680: {
             slidesPerView: 2,
           },
-          680: {
+          880: {
             slidesPerView: 3,
           },
         }}
