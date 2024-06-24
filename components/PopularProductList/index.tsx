@@ -47,6 +47,7 @@ const PopularList = () => {
           }}
           autoplay={{ delay: 10000 }}
           style={{
+            paddingLeft: "22px",
             maskImage:
               "linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 4%, rgba(0,0,0,1) 96%, rgba(0,0,0,0) 100%)",
           }}
