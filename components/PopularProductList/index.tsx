@@ -27,7 +27,7 @@ const PopularList = () => {
 
   return (
     <div className="flex w-full max-w-7xl flex-col items-start gap-2 mx-auto">
-      <div className="w-full px-6 py-5">
+      <div className="w-full pl-8 py-5"> {/* Добавлено pl-8 */}
         <Swiper
           modules={[Autoplay]}
           loop={true}
@@ -47,6 +47,7 @@ const PopularList = () => {
           }}
           autoplay={{ delay: 10000 }}
           style={{
+            paddingLeft: "16px",  // Добавлено paddingLeft
             maskImage:
               "linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 4%, rgba(0,0,0,1) 96%, rgba(0,0,0,0) 100%)",
           }}
@@ -54,7 +55,7 @@ const PopularList = () => {
           {products &&
             products.map((product, index) => (
               <SwiperSlide key={index} className="!m-0">
-                <div className="relative flex w-full flex-col gap-3 rounded-sm p-4 bg-transparent">
+                <div className="relative flex w-64 max-w-full flex-none scroll-ml-6 flex-col gap-3 rounded-sm p-4 bg-transparent snap-start">
                   <Button
                     variant="flat"
                     isIconOnly
@@ -65,7 +66,7 @@ const PopularList = () => {
                     <Icon name="star" size={18} className="fill-secondary" />
                   </Button>
 
-                  <div className="relative flex h-52 w-full flex-col items-center justify-center overflow-hidden rounded-lg">
+                  <div className="relative flex h-52 max-h-full w-full flex-col items-center justify-center overflow-visible rounded-lg">
                     <div className="w-full h-full blur-[1px]">
                       <img
                         src={product.imageUrl?.[0]?.url}
@@ -73,7 +74,7 @@ const PopularList = () => {
                       />
                     </div>
                     <img
-                      className="absolute top-0 left-0 w-full h-full object-contain"
+                      className="block absolute top-0 left-0 w-full h-full object-contain"
                       src={product.imageUrl?.[0]?.url}
                       alt={product.title}
                     />
