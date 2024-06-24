@@ -47,7 +47,7 @@ const PlaceListGrid = ({
         <div className="w-full flex flex-col gap-4 justify-center items-center py-8">
           <span className="text-xl">Товары по данному запросу не найдены</span>
         </div>
-      ): null}
+      ) : null}
       <div className="max-w-7xl grid w-full grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 mx-auto">
         {isLoading && <SkeletonCart />}
         {!isLoading &&

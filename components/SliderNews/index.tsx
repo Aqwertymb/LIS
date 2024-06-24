@@ -18,8 +18,7 @@ const SliderNews = () => {
     {
       id: 2,
       title: "Это точно лучше чем носки или пена для бритья",
-      description:
-        "Сыр моцарелла внутри, снаружи Творожный сыр с зеленью",
+      description: "Сыр моцарелла внутри, снаружи Творожный сыр с зеленью",
       image: "/aZt9ZjxgbZI.jpg",
     },
     {
@@ -37,7 +36,7 @@ const SliderNews = () => {
   ];
 
   return (
-    <div className="flex w-full h-[50vh] mx-auto overflow-hidden">
+    <div className="flex w-full h-auto sm:h-[40vh] md:h-[30vh] lg:h-[50vh] xl:h-[60vh] mx-auto overflow-hidden">
       <Swiper
         centeredSlides
         loop
@@ -70,9 +69,11 @@ const SliderNews = () => {
                 className="w-full h-full object-cover"
               />
               <div className="absolute bottom-0 left-0 w-full min-h-[80px] bg-black/20 text-white">
-                <div className="px-4 py-2 lg:p-4 text-left">
-                  <h1 className="text-base leading-4 mb-2">{data.title}</h1>
-                  <p className="text-xs md:text-sm line-clamp-2 xl:line-clamp-3">
+                <div className="px-4 py-2 sm:px-4 sm:py-3 md:px-8 md:py-4 lg:p-4 text-left">
+                  <h1 className="text-base sm:text-lg md:text-lg lg:text-lg leading-4 mb-2">
+                    {data.title}
+                  </h1>
+                  <p className="text-xs sm:text-sm md:text-sm lg:text-sm line-clamp-2 xl:line-clamp-3">
                     {data.description}
                   </p>
                 </div>
