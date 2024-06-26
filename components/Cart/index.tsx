@@ -73,9 +73,7 @@ export default function Cart() {
       if (response.ok) {
         const data = await response.json();
         alert(data.message);
-      } else {
-        throw new Error("Failed to send email");
-      }
+      } 
     } catch (error) {
       console.error("Error:", error);
       alert("Ошибка при отправке сообщения.");
@@ -88,6 +86,7 @@ export default function Cart() {
     setShopList(""); // Очищаем сообщение
     onClose(); // Закрываем модальное окно
   };
+  
 
   return (
     <>
@@ -154,7 +153,6 @@ export default function Cart() {
                 onChange={(event) => setShopList(event.target.value)}
               />
               <Textarea
-                isRequired
                 id="comment"
                 label="Сообщение"
                 labelPlacement="inside"
